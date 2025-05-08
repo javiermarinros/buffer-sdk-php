@@ -28,7 +28,7 @@ class Update
      *
      * @var array
      */
-    public $profiles = array();
+    public $profiles = [];
 
     /**
      * If shorten is false links within the text will not be automatically
@@ -60,7 +60,7 @@ class Update
      *
      * @var array
      */
-    public $media = array();
+    public $media = [];
 
     /**
      * A date describing when the update should be posted. Overrides any top or
@@ -93,11 +93,11 @@ class Update
      */
     public function addMedia($key, $value): self
     {
-        $available = array('link', 'description', 'picture', 'photo');
+        $available = ['link', 'description', 'picture', 'photo'];
 
         // accept only valid types for media
         if (!in_array($key, $available)) {
-            throw new InvalidArgumentException('Media type must be a valid value: '.implode(', ', $available).'.');
+            throw new InvalidArgumentException('Media type must be a valid value: ' . implode(', ', $available) . '.');
         }
 
         $this->media[$key] = $value;
