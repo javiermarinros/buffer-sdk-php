@@ -18,7 +18,7 @@ class Update
     /**
      * The status update text.
      *
-     * @var string
+     * @var string|null
      */
     public $text = null;
 
@@ -67,7 +67,7 @@ class Update
      * now parameter. When using ISO 8601 format, if no UTC offset is specified,
      * UTC is assumed.
      *
-     * @var \DateTime
+     * @var string|null
      */
     public $scheduled_at = null;
 
@@ -125,7 +125,7 @@ class Update
         return $this;
     }
 
-    public function validate()
+    public function validate(): void
     {
         if ((!isset($this->text) || trim($this->text) === '')) {
             throw new InvalidArgumentException('text field should be filled');

@@ -36,13 +36,6 @@ class UpdateService
      * Returns an array of updates that are currently in the buffer for an
      * individual social media profile.
      *
-     * @param string $profileID
-     *
-     * @param int $page
-     * @param int $count
-     * @param string|null $since
-     * @param bool $utc
-     *
      * @return array
      */
     public function getPendingUpdates(string $profileID, int $page = 1, int $count = 100, string $since = "", bool $utc = false): array
@@ -53,13 +46,6 @@ class UpdateService
     /**
      * Returns an array of updates that have been sent from the buffer for an
      * individual social media profile.
-     *
-     * @param string $profileID
-     *
-     * @param int $page
-     * @param int $count
-     * @param string|null $since
-     * @param bool $utc
      *
      * @return array
      */
@@ -77,7 +63,7 @@ class UpdateService
      *
      * @return array
      */
-    public function reorderUpdates(string $profileID, array $order, int $offset = null, bool $utc = false): array
+    public function reorderUpdates(string $profileID, array $order, ?int $offset = null, bool $utc = false): array
     {
         return $this->client->createHttpRequest(
             'POST',
@@ -102,7 +88,7 @@ class UpdateService
      *
      * @return array
      */
-    public function shuffleUpdates(string $profileID, int $count = null, bool $utc = false): array
+    public function shuffleUpdates(string $profileID, ?int $count = null, bool $utc = false): array
     {
         return $this->client->createHttpRequest(
             'POST',
