@@ -3,13 +3,20 @@
 namespace BufferSDK\Http;
 
 use BufferSDK\Auth\AuthorizationTokenInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Client implements ClientInterface
 {
     /** @var string */
     protected $baseURL = 'https://api.bufferapp.com/1/';
 
-    /** @var \GuzzleHttp\Client */
+    /** @var HttpClientInterface */
     private $httpClient;
 
     /**
@@ -17,35 +24,26 @@ class Client implements ClientInterface
      */
     public function __construct(AuthorizationTokenInterface $auth)
     {
-        $this->httpClient = new \GuzzleHttp\Client([
-            'base_uri' => $this->baseURL,
-            'handler' => new \GuzzleHttp\Handler\CurlHandler(),
-            \GuzzleHttp\RequestOptions::HEADERS => [
+        $this->httpClient = HttpClient::create([
+            'headers' => [
                 'Authorization' => 'Bearer ' . $auth->getAccessToken(),
-            ],
+            ]
         ]);
     }
 
     /**
      * Create Http Request and send the request.
      *
-     * @param string $method
-     * @param string $endpoint
-     * @param array $options
-     *
-     * @return array
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws TransportExceptionInterface
+     * @throws DecodingExceptionInterface    When the body cannot be decoded to an array
+     * @throws TransportExceptionInterface   When a network error occurs
+     * @throws RedirectionExceptionInterface On a 3xx when $throw is true and the "max_redirects" option has been reached
+     * @throws ClientExceptionInterface      On a 4xx when $throw is true
+     * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
     public function createHttpRequest(string $method, string $endpoint, array $options = []): array
     {
-        $response = $this->httpClient->request($method, $endpoint, $options);
-        $responseBody = json_decode($response->getBody()->getContents(), true, 512, JSON_BIGINT_AS_STRING);
-
-        if (\JSON_ERROR_NONE !== json_last_error()) {
-            throw new \Exception(json_last_error_msg() . sprintf(' for "%s".', $method), json_last_error());
-        }
-
-        return $responseBody;
+        $response = $this->httpClient->request($method, $this->baseURL . $endpoint, $options);
+        return $response->toArray();
     }
 }

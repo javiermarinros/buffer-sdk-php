@@ -74,7 +74,7 @@ class ProfileService
             'POST',
             "profiles/{$profileID}/schedules/update.json",
             [
-                \GuzzleHttp\RequestOptions::JSON => $payload,
+                'body' => $payload,
             ]
         );
     }

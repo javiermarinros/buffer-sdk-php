@@ -69,7 +69,7 @@ class UpdateService
             'POST',
             "profiles/{$profileID}/updates/reorder.json",
             [
-                \GuzzleHttp\RequestOptions::JSON => [
+                'body' => [
                     'order' => $order,
                     'offset' => $offset,
                     'utc' => $utc,
@@ -94,7 +94,7 @@ class UpdateService
             'POST',
             "profiles/{$profileID}/updates/shuffle.json",
             [
-                \GuzzleHttp\RequestOptions::JSON => [
+                'body' => [
                     'count' => $count,
                     'utc' => $utc,
                 ],
@@ -130,7 +130,7 @@ class UpdateService
             'POST',
             'updates/create.json',
             [
-                \GuzzleHttp\RequestOptions::JSON => $payload,
+                'body' => $payload,
             ]
         );
     }
@@ -160,7 +160,7 @@ class UpdateService
             'POST',
             "updates/{$update->id}/update.json",
             [
-                \GuzzleHttp\RequestOptions::JSON => $payload,
+                'body' => $payload,
             ]
         );
     }
