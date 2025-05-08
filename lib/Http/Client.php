@@ -19,6 +19,7 @@ class Client implements ClientInterface
     {
         $this->httpClient = new \GuzzleHttp\Client([
             'base_uri' => $this->baseURL,
+            'handler' => new \GuzzleHttp\Handler\CurlHandler(),
             \GuzzleHttp\RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer ' . $auth->getAccessToken(),
             ],
